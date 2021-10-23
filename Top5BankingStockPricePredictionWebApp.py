@@ -13,7 +13,7 @@ plt.style.use('fivethirtyeight')
 
 st.title('Top 5 Banking Stock Price Prediction Web Application')
 
-st.image('https://github.com/DebnathRohit/Top-5-Indian-Banking-Stock-Price-Prediction-Web-App/blob/main/StockPricePredictionWebAppBanner.jpg')
+st.image("StockPricePredictionWebAppBanner.jpg")
 
 with st.spinner('Wait for it...'):
   time.sleep(5)
