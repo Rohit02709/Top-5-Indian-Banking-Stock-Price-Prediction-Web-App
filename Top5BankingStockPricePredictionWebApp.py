@@ -139,7 +139,7 @@ plt.legend()
 st.pyplot(fig2)
 
 st.markdown('**Play this audio file inorder to understand each of the element of the Web Application:**')
-st.audio("https://github.com/DebnathRohit/Top-5-Indian-Banking-Stock-Price-Prediction-Web-App/blob/main/Voiceover%20for%20stock%20price%20prediction%20web%20app.mp3")
+st.audio("Voiceover for stock price prediction web app.mp3")
 
 agree = st.checkbox('Check this box to see the warning!')
 if agree:
