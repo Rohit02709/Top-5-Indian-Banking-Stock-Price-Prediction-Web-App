@@ -43,14 +43,14 @@ st.write(data)
 st.subheader(f"Today's price change in {selected_stock}: ")
 st.metric(label="Current Price", value= round((data['Close'].iloc[data.shape[0]-1]), 2),
           delta= str(round((data['Close'].iloc[data.shape[0]-1] - data['Close'].iloc[data.shape[0]-2]), 2))
-          + ' ' + str('(' + str(round(((data['Close'].iloc[data.shape[0]-1] - data['Close'].iloc[data.shape[0]-2])
+          + '  ' + str('(' + str(round(((data['Close'].iloc[data.shape[0]-1] - data['Close'].iloc[data.shape[0]-2])
           / data['Close'].iloc[data.shape[0]-2] *100),2)) + '%' + ')'))
 
 st.subheader(f"Summary of {selected_stock}'s dataset: ")
 st.write(data.describe())
 
 st.subheader(f"{selected_stock}'s Financial Statements:")
-Fin_Stat = st.radio("Select any one of this to view",
+Fin_Stat = st.radio("Select any one of these to view",
                     ('Income Statement', 'Balance Sheet', 'Cash Flow'))
 Ticker = yf.Ticker(selected_stock)
 if Fin_Stat == 'Income Statement':
@@ -150,11 +150,12 @@ st.pyplot(fig2)
 st.markdown('**Play this audio file inorder to understand each of the element of the Web Application:**')
 st.audio("Voiceover for stock price prediction web app.mp3")
 
-agree = st.checkbox('Check this box to see the warning!')
+agree = st.checkbox('Check this box to see the Warning!')
 if agree:
-  st.error('''This Dashboard is made for educational and research purpose only. Don't take this
+  st.error('''Disclaimer: This Web Application is made for educational and research purpose only. Don't take this
   as an investment advice or don't indulge in investing in any of the aforementioned stocks.''')
 
 st.caption('''Please press the "Comment" button below to give your valuable suggestion.''')
 if st.button('Comment'):
   st_disqus("comment-box")
+  
