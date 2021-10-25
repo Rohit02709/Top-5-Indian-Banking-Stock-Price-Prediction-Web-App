@@ -50,16 +50,19 @@ Ticker = yf.Ticker(selected_stock)
 if Fin_Stat == 'Income Statement':
   IS = Ticker.get_financials()
   IS.columns = IS.columns.strftime('%Y-%m-%d')
+  IS.fillna(0, inplace=True)
   st.markdown(f"Income Statement of {selected_stock}")
   st.write(IS)
 elif Fin_Stat == 'Balance Sheet':
   BS = Ticker.get_balancesheet()
   BS.columns = BS.columns.strftime('%Y-%m-%d')
+  BS.fillna(0, inplace=True)
   st.markdown(f"Balance Sheet of {selected_stock}")
   st.write(BS)
 elif Fin_Stat == 'Cash Flow':
   CF = Ticker.get_cashflow()
   CF.columns = CF.columns.strftime('%Y-%m-%d')
+  CF.fillna(0, inplace=True)
   st.markdown(f"Cash Flow of {selected_stock}")
   st.write(CF)
 
