@@ -21,8 +21,8 @@ with st.spinner('Wait for it...'):
   selected_stock = st.selectbox("Select Stock for Prediction", stocks)
 st.success('Loading Data Done!')
 
-START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2019-01-01', '%Y-%m-%d'))
-TODAY = dt.today().strftime('%Y-%m-%d')
+START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2019-10-01', '%Y-%m-%d'))
+TODAY = dt.today()
 st.info("ARIMA model works best on shorter time span, so try to keep the dataframe short inorder to get reasonable result.")
 
 @st.cache(allow_output_mutation=True)
@@ -74,7 +74,8 @@ elif Fin_Stat == 'Cash Flow':
 
 MA_1st = st.number_input('Insert the number of days for 1st Moving Average: ', value=34)
 MA_2nd = st.number_input('Insert the number of days for 2nd Moving Average: ', value=89)
-st.caption("You can choose any of these Fibonacci Sequence number for the two Moving Average calculation (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233....)")
+st.caption('''You can choose any of these Fibonacci Sequence number for the two Moving Average calculation 
+(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233....)''')
 data['MA_1st'] = data['Close'].rolling(MA_1st).mean()
 data['MA_2nd'] = data['Close'].rolling(MA_2nd).mean()
 
@@ -107,7 +108,7 @@ model_fit = model.fit()
 train_data = df.iloc[50:int(len(df)*0.8)] # 80% minus first 50
 test_data = df.iloc[int(len(df)*0.8):] # Last 20%
 
-sample_days = st.number_input("Manipulate the sampling days to improve the training model for prediction:", value=500)
+sample_days = st.number_input("Manipulate the sampling days to improve the training model for prediction:", value=350)
 train_model = AutoReg(df['Close'], sample_days, old_names=False).fit(cov_type="HC0")
 
 start = len(train_data)
