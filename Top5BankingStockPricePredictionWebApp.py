@@ -30,7 +30,7 @@ def load_data(ticker):
   data = yf.download(ticker, START, TODAY)
   data.reset_index(inplace=True)
   data['Date'] = data['Date'].dt.strftime('%Y-%m-%d')
-  data = data.drop(['Adj Close','Volume'], axis = 1)
+  data = data.drop('Adj Close', axis = 1)
   return data
 
 data_load_state = st.markdown("Load state...")
@@ -39,6 +39,12 @@ data_load_state.markdown("Loading data...done!")
 
 st.subheader(f'Data of {selected_stock} from {START} till now: ')
 st.write(data)
+
+st.subheader(f"Today's price change in {selected_stock}: ")
+st.metric(label="Current Price", value= round((data['Close'].iloc[data.shape[0]-1]), 2),
+          delta= str(round((data['Close'].iloc[data.shape[0]-1] - data['Close'].iloc[data.shape[0]-2]), 2))
+          + ' ' + str('(' + str(round(((data['Close'].iloc[data.shape[0]-1] - data['Close'].iloc[data.shape[0]-2])
+          / data['Close'].iloc[data.shape[0]-2] *100),2)) + '%' + ')'))
 
 st.subheader(f"Summary of {selected_stock}'s dataset: ")
 st.write(data.describe())
