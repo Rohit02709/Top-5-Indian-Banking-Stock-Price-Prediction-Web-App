@@ -72,6 +72,45 @@ elif Fin_Stat == 'Cash Flow':
   st.markdown(f"Cash Flow of {selected_stock}")
   st.write(CF)
 
+@st.cache
+def bank_ratios(selected_stock):
+  if selected_stock == 'HDFCBANK.NS':
+    bank_ratios = pd.read_csv('HDFC_Ratios.csv', parse_dates=True)
+    bank_ratios.set_index('Ratios', inplace = True)
+  elif selected_stock == 'SBIN.NS':
+    bank_ratios = pd.read_csv('SBI_Ratios.csv', parse_dates=True)
+    bank_ratios.set_index('Ratios', inplace = True)
+  elif selected_stock == 'ICICIBANK.NS':
+    bank_ratios = pd.read_csv('ICICI_Ratios.csv', parse_dates=True)
+    bank_ratios.set_index('Ratios', inplace = True)
+  elif selected_stock == 'AXISBANK.NS':
+    bank_ratios = pd.read_csv('AXIS_Ratios.csv', parse_dates=True)
+    bank_ratios.set_index('Ratios', inplace = True)
+  elif selected_stock == 'KOTAKBANK.NS':
+    bank_ratios = pd.read_csv('KOTAK_Ratios.csv', parse_dates=True)
+    bank_ratios.set_index('Ratios', inplace = True)  
+  return bank_ratios
+bank_ratios = bank_ratios(selected_stock)
+
+st.subheader(f"{selected_stock}'s important ratios:")
+ratios = ('EPS (Rs.)', 'CASA (%)', 'P/E', 'CAR (%)', 'Net Profit Margin (%)', 'Return on Assets (%)', 'Net Interest Margin (%)')
+col, buff, buff2 = st.columns([2,2,1])
+selected_ratio = col.selectbox('Select a ratio to view', ratios)
+if selected_ratio == 'EPS (Rs.)':
+  st.bar_chart(bank_ratios.iloc[0])
+elif selected_ratio == 'CASA (%)':
+  st.bar_chart(bank_ratios.iloc[1])
+elif selected_ratio == 'P/E':
+  st.bar_chart(bank_ratios.iloc[2])
+elif selected_ratio == 'CAR (%)':
+  st.bar_chart(bank_ratios.iloc[3]) 
+elif selected_ratio == 'Net Profit Margin (%)':
+  st.bar_chart(bank_ratios.iloc[4])
+elif selected_ratio == 'Return on Assets (%)':
+  st.bar_chart(bank_ratios.iloc[5])
+elif selected_ratio == 'Net Interest Margin (%)':
+  st.bar_chart(bank_ratios.iloc[6])  
+  
 MA_1st = st.number_input('Insert the number of days for 1st Moving Average: ', value=34)
 MA_2nd = st.number_input('Insert the number of days for 2nd Moving Average: ', value=89)
 st.caption('''You can choose any of these Fibonacci Sequence number for the two Moving Average calculation 
