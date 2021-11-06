@@ -15,7 +15,7 @@ st.title('Top 5 Banking Stock Price Prediction Web Application')
 
 st.image("StockPricePredictionWebAppBanner.jpg")
 
-with st.spinner('Wait for it...'):
+with st.spinner('Please wait...'):
   time.sleep(3)
   stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS')
   selected_stock = st.selectbox("Select Stock for Prediction", stocks)
