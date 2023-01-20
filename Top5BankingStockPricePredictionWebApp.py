@@ -1,27 +1,27 @@
+import time
 import numpy as np 
 import pandas as pd
 import yfinance as yf
-from datetime import datetime as dt
-import time
 import streamlit as st
+import matplotlib.pyplot as plt
+from plotly import graph_objs as go
+from datetime import datetime as dt
 from streamlit_disqus import st_disqus
 from statsmodels.tsa.ar_model import AutoReg, ar_select_order
-from plotly import graph_objs as go
-import matplotlib.pyplot as plt
 plt.style.use('fivethirtyeight')
 
 
 st.title('Top 5 Banking Stock Price Prediction Web Application')
 
-st.image("StockPricePredictionWebAppBanner.jpg")
+st.image('''/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/Image for Top 5 Banking stock price prediction web app.jpg''')
 
-with st.spinner('Please wait...'):
-  time.sleep(3)
+with st.spinner('Wait for it...'):
+  time.sleep(5)
   stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS')
   selected_stock = st.selectbox("Select Stock for Prediction", stocks)
 st.success('Loading Data Done!')
 
-START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2019-10-01', '%Y-%m-%d'))
+START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2022-01-01', '%Y-%m-%d'))
 TODAY = dt.today()
 st.info("ARIMA model works best on shorter time span, so try to keep the dataframe short inorder to get reasonable result.")
 
@@ -50,44 +50,43 @@ st.subheader(f"Summary of {selected_stock}'s dataset: ")
 st.write(data.describe())
 
 st.subheader(f"{selected_stock}'s Financial Statements:")
-Fin_Stat = st.radio("Select any one of these to view",
+Fin_Stat = st.radio("Select any one of this to view",
                     ('Income Statement', 'Balance Sheet', 'Cash Flow'))
 Ticker = yf.Ticker(selected_stock)
 if Fin_Stat == 'Income Statement':
   IS = Ticker.get_financials()
   IS.columns = IS.columns.strftime('%Y-%m-%d')
   IS.fillna(0, inplace=True)
-  st.markdown(f"Income Statement of {selected_stock}")
+  st.markdown(f"**Income Statement of {selected_stock}**")
   st.write(IS)
 elif Fin_Stat == 'Balance Sheet':
   BS = Ticker.get_balancesheet()
   BS.columns = BS.columns.strftime('%Y-%m-%d')
   BS.fillna(0, inplace=True)
-  st.markdown(f"Balance Sheet of {selected_stock}")
-  st.write(BS)
+  st.markdown(f"**Balance Sheet of {selected_stock}**")
 elif Fin_Stat == 'Cash Flow':
   CF = Ticker.get_cashflow()
   CF.columns = CF.columns.strftime('%Y-%m-%d')
   CF.fillna(0, inplace=True)
-  st.markdown(f"Cash Flow of {selected_stock}")
+  st.markdown(f"**Cash flow of {selected_stock}**")
   st.write(CF)
 
 @st.cache
 def bank_ratios(selected_stock):
   if selected_stock == 'HDFCBANK.NS':
-    bank_ratios = pd.read_csv('HDFC_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/HDFC_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'SBIN.NS':
-    bank_ratios = pd.read_csv('SBI_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/SBI_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'ICICIBANK.NS':
-    bank_ratios = pd.read_csv('ICICI_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/ICICI_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'AXISBANK.NS':
-    bank_ratios = pd.read_csv('AXIS_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/AXIS_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'KOTAKBANK.NS':
-    bank_ratios = pd.read_csv('KOTAK_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/KOTAK_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)  
   return bank_ratios
 bank_ratios = bank_ratios(selected_stock)
@@ -109,15 +108,14 @@ elif selected_ratio == 'Net Profit Margin (%)':
 elif selected_ratio == 'Return on Assets (%)':
   st.bar_chart(bank_ratios.iloc[5])
 elif selected_ratio == 'Net Interest Margin (%)':
-  st.bar_chart(bank_ratios.iloc[6])  
-  
+  st.bar_chart(bank_ratios.iloc[6])
+
 MA_1st = st.number_input('Insert the number of days for 1st Moving Average: ', value=34)
 MA_2nd = st.number_input('Insert the number of days for 2nd Moving Average: ', value=89)
 st.caption('''You can choose any of these Fibonacci Sequence number for the two Moving Average calculation 
-(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233....)''')
+          (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233....)''')
 data['MA_1st'] = data['Close'].rolling(MA_1st).mean()
 data['MA_2nd'] = data['Close'].rolling(MA_2nd).mean()
-
 st.subheader(f'{selected_stock} VS {MA_1st} days MA VS {MA_2nd} days MA')
 def plot_raw_data():
   fig = go.Figure()
@@ -126,7 +124,6 @@ def plot_raw_data():
   fig.add_trace(go.Scatter(x = data['Date'], y = data['MA_2nd'], name=f'{MA_2nd} days MA', line_color='red'))
   fig.layout.update(xaxis_rangeslider_visible = True)
   st.plotly_chart(fig, use_container_width=True)
-
 plot_raw_data()
 
 @st.cache(allow_output_mutation=True)
@@ -158,7 +155,7 @@ prediction = prediction.to_frame()
 prediction = prediction.rename(columns = {0 : 'Prediction'})
 
 prediction_days = st.slider("Insert the number of day's Closing price you want to predict in the fututre:", 50, 100, value = 60)
-st.caption("The first 50 days price will be used for validation purpose of the model that you can see in the plot.")
+st.caption("The first 30 days price will be used for validation purpose of the model that you can see in the plot.")
 forecast = train_model.predict(start=end, end = end + prediction_days, dynamic = True)
 forecast = forecast.to_frame()
 forecast = forecast.rename(columns = {0 : 'Forecast'}) 
@@ -188,14 +185,13 @@ plt.legend()
 st.pyplot(fig2)
 
 st.markdown('**Play this audio file inorder to understand each of the element of the Web Application:**')
-st.audio("Voiceover for stock price prediction web app.mp3")
+st.audio("/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/Voiceover for stock price prediction web app.mp3")
 
-agree = st.checkbox('Check this box to see the Warning!')
+agree = st.checkbox('Check this box to see the warning!')
 if agree:
-  st.error('''Disclaimer: This Web Application is made for educational and research purpose only. Don't take this
+  st.error('''This Dashboard is made for educational and research purpose only. Don't take this
   as an investment advice or don't indulge in investing in any of the aforementioned stocks.''')
 
 st.caption('''Please press the "Comment" button below to give your valuable suggestion.''')
 if st.button('Comment'):
   st_disqus("comment-box")
-  
