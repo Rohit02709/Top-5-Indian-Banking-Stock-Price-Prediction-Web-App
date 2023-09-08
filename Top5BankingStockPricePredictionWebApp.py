@@ -1,5 +1,5 @@
 import time
-import numpy as np 
+import numpy as np
 import pandas as pd
 import yfinance as yf
 import streamlit as st
@@ -25,7 +25,7 @@ START = st.date_input('Enter the starting date for Prediction', value= dt.strpti
 TODAY = dt.today()
 st.info("ARIMA model works best on shorter time span, so try to keep the dataframe short inorder to get reasonable result.")
 
-@st.cache(allow_output_mutation=True)
+#@st.cache_data
 def load_data(ticker):
   data = yf.download(ticker, START, TODAY)
   data.reset_index(inplace=True)
@@ -71,7 +71,7 @@ elif Fin_Stat == 'Cash Flow':
   st.markdown(f"**Cash flow of {selected_stock}**")
   st.write(CF)
 
-@st.cache
+#@st.cache_data
 def bank_ratios(selected_stock):
   if selected_stock == 'HDFCBANK.NS':
     bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/HDFC_Ratios.csv', parse_dates=True)
@@ -87,32 +87,34 @@ def bank_ratios(selected_stock):
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'KOTAKBANK.NS':
     bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/KOTAK_Ratios.csv', parse_dates=True)
-    bank_ratios.set_index('Ratios', inplace = True)  
+    bank_ratios.set_index('Ratios', inplace = True)
   return bank_ratios
 bank_ratios = bank_ratios(selected_stock)
 
 st.subheader(f"{selected_stock}'s important ratios:")
-ratios = ('EPS (Rs.)', 'CASA (%)', 'P/E', 'CAR (%)', 'Net Profit Margin (%)', 'Return on Assets (%)', 'Net Interest Margin (%)')
+ratios = ('EPS (Rs.)', 'CASA (%)', 'LTD (%)', 'CAR (%)', 'Net Profit Margin (%)', 'Return on Assets (%)', 'Net Interest Margin (%)', 'Gross NPA (%)')
 col, buff, buff2 = st.columns([2,2,1])
 selected_ratio = col.selectbox('Select a ratio to view', ratios)
 if selected_ratio == 'EPS (Rs.)':
   st.bar_chart(bank_ratios.iloc[0])
 elif selected_ratio == 'CASA (%)':
   st.bar_chart(bank_ratios.iloc[1])
-elif selected_ratio == 'P/E':
+elif selected_ratio == 'LTD (%)':
   st.bar_chart(bank_ratios.iloc[2])
 elif selected_ratio == 'CAR (%)':
-  st.bar_chart(bank_ratios.iloc[3]) 
+  st.bar_chart(bank_ratios.iloc[3])
 elif selected_ratio == 'Net Profit Margin (%)':
   st.bar_chart(bank_ratios.iloc[4])
 elif selected_ratio == 'Return on Assets (%)':
   st.bar_chart(bank_ratios.iloc[5])
 elif selected_ratio == 'Net Interest Margin (%)':
   st.bar_chart(bank_ratios.iloc[6])
+elif selected_ratio == 'Gross NPA (%)':
+  st.bar_chart(bank_ratios.iloc[7])
 
 MA_1st = st.number_input('Insert the number of days for 1st Moving Average: ', value=34)
 MA_2nd = st.number_input('Insert the number of days for 2nd Moving Average: ', value=89)
-st.caption('''You can choose any of these Fibonacci Sequence number for the two Moving Average calculation 
+st.caption('''You can choose any of these Fibonacci Sequence number for the two Moving Average calculation
           (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233....)''')
 data['MA_1st'] = data['Close'].rolling(MA_1st).mean()
 data['MA_2nd'] = data['Close'].rolling(MA_2nd).mean()
@@ -126,7 +128,7 @@ def plot_raw_data():
   st.plotly_chart(fig, use_container_width=True)
 plot_raw_data()
 
-@st.cache(allow_output_mutation=True)
+#@st.cache_data
 def load_df(ticker):
   df = yf.download(ticker, START, TODAY)
   df = df.drop(df.columns[[0,1,2,4,5]], axis=1)
@@ -144,7 +146,7 @@ model_fit = model.fit()
 train_data = df.iloc[50:int(len(df)*0.8)] # 80% minus first 50
 test_data = df.iloc[int(len(df)*0.8):] # Last 20%
 
-sample_days = st.number_input("Manipulate the sampling days to improve the training model for prediction:", value=350)
+sample_days = st.number_input("Change the sampling days to improve the training model for prediction:", value=200)
 train_model = AutoReg(df['Close'], sample_days, old_names=False).fit(cov_type="HC0")
 
 start = len(train_data)
@@ -158,7 +160,7 @@ prediction_days = st.slider("Insert the number of day's Closing price you want t
 st.caption("The first 30 days price will be used for validation purpose of the model that you can see in the plot.")
 forecast = train_model.predict(start=end, end = end + prediction_days, dynamic = True)
 forecast = forecast.to_frame()
-forecast = forecast.rename(columns = {0 : 'Forecast'}) 
+forecast = forecast.rename(columns = {0 : 'Forecast'})
 
 st.subheader(f"{selected_stock}'s Actual Closing VS Training Data VS Predicted future price")
 def plot_raw_data():
