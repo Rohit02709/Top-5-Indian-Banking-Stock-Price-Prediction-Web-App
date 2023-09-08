@@ -13,7 +13,7 @@ plt.style.use('fivethirtyeight')
 
 st.title('Top 5 Banking Stock Price Prediction Web Application')
 
-st.image('''/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/Image for Top 5 Banking stock price prediction web app.jpg''')
+st.image('''StockPricePredictionWebAppBanner.jpg''')
 
 with st.spinner('Wait for it...'):
   time.sleep(5)
@@ -74,19 +74,19 @@ elif Fin_Stat == 'Cash Flow':
 #@st.cache_data
 def bank_ratios(selected_stock):
   if selected_stock == 'HDFCBANK.NS':
-    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/HDFC_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('HDFC_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'SBIN.NS':
-    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/SBI_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('SBI_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'ICICIBANK.NS':
-    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/ICICI_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('ICICI_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'AXISBANK.NS':
-    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/AXIS_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('AXIS_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   elif selected_stock == 'KOTAKBANK.NS':
-    bank_ratios = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/KOTAK_Ratios.csv', parse_dates=True)
+    bank_ratios = pd.read_csv('KOTAK_Ratios.csv', parse_dates=True)
     bank_ratios.set_index('Ratios', inplace = True)
   return bank_ratios
 bank_ratios = bank_ratios(selected_stock)
@@ -187,12 +187,12 @@ plt.legend()
 st.pyplot(fig2)
 
 st.markdown('**Play this audio file inorder to understand each of the element of the Web Application:**')
-st.audio("/content/drive/MyDrive/Colab Notebooks/Top 5 Banking Stock Price Prediction Web App/Voiceover for stock price prediction web app.mp3")
+st.audio("Voiceover for stock price prediction web app.mp3")
 
-agree = st.checkbox('Check this box to see the warning!')
+agree = st.toggle('Turn this on to see the warning message!')
 if agree:
   st.error('''This Dashboard is made for educational and research purpose only. Don't take this
-  as an investment advice or don't indulge in investing in any of the aforementioned stocks.''')
+  as an investment advice or don't indulge in investing in any of the aforementioned stockson the basis of this app.''')
 
 st.caption('''Please press the "Comment" button below to give your valuable suggestion.''')
 if st.button('Comment'):
