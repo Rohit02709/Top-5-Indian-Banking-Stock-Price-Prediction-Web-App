@@ -17,11 +17,11 @@ st.image('''StockPricePredictionWebAppBanner.jpg''')
 
 with st.spinner('Wait for it...'):
   time.sleep(5)
-  stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS')
+  stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS','^NSEI.NS')
   selected_stock = st.selectbox("Select Stock for Prediction", stocks)
 st.success('Loading Data Done!')
 
-START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2022-01-01', '%Y-%m-%d'))
+START = st.date_input('Enter the starting date for Prediction', value= dt.strptime('2023-01-01', '%Y-%m-%d'))
 TODAY = dt.today()
 st.info("ARIMA model works best on shorter time span, so try to keep the dataframe short inorder to get reasonable result.")
 
