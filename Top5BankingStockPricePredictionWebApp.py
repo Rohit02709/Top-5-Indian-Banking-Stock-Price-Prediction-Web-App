@@ -17,7 +17,7 @@ st.image('''StockPricePredictionWebAppBanner.jpg''')
 
 with st.spinner('Wait for it...'):
   time.sleep(5)
-  stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS','^NSEI.NS')
+  stocks = ('HDFCBANK.NS', 'SBIN.NS', 'ICICIBANK.NS', 'AXISBANK.NS', 'KOTAKBANK.NS','^NSEI')
   selected_stock = st.selectbox("Select Stock for Prediction", stocks)
 st.success('Loading Data Done!')
 
